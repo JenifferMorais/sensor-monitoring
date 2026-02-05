@@ -49,4 +49,15 @@ public static class MapeadorEquipamento
                 .ToList()
         };
     }
+
+    public static Equipamento ParaEntidade(this RequisicaoCriarEquipamento requisicao)
+    {
+        return new Equipamento
+        {
+            Nome = requisicao.Nome,
+            Descricao = requisicao.Descricao,
+            IdSetor = requisicao.IdSetor,
+            EstaAtivo = requisicao.EstaAtivo
+        };
+    }
 }

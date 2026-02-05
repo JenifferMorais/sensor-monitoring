@@ -1,3 +1,4 @@
+using FluentValidation;
 using IoTSensorMonitoring.Application.DTOs;
 using IoTSensorMonitoring.Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +12,34 @@ public class EquipamentosController : ControllerBase
 {
     private readonly ServicoMedicao _servicoMedicao;
     private readonly ServicoConsultaEquipamento _servicoConsultaEquipamento;
+    private readonly IValidator<RequisicaoCriarEquipamento> _validadorCriacao;
 
     public EquipamentosController(
         ServicoMedicao servicoMedicao,
-        ServicoConsultaEquipamento servicoConsultaEquipamento)
+        ServicoConsultaEquipamento servicoConsultaEquipamento,
+        IValidator<RequisicaoCriarEquipamento> validadorCriacao)
     {
         _servicoMedicao = servicoMedicao;
         _servicoConsultaEquipamento = servicoConsultaEquipamento;
+        _validadorCriacao = validadorCriacao;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CriarEquipamento(
+        [FromBody] RequisicaoCriarEquipamento requisicao,
+        CancellationToken tokenCancelamento = default)
+    {
+        var validacao = await _validadorCriacao.ValidateAsync(requisicao, tokenCancelamento);
+
+        if (!validacao.IsValid)
+        {
+            var erros = string.Join("; ", validacao.Errors.Select(e => e.ErrorMessage));
+            return BadRequest(RespostaApi.De(ResultadoOperacao<object>.Falha(erros)));
+        }
+
+        var resultado = await _servicoConsultaEquipamento.CriarAsync(requisicao, tokenCancelamento);
+        var resposta = RespostaApi.De(resultado);
+        return StatusCode(resposta.Codigo, resposta);
     }
 
     [HttpGet("{id}")]

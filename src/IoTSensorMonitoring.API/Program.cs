@@ -53,6 +53,7 @@ builder.Services.AddScoped<ServicoAvaliacaoAlerta>();
 
 builder.Services.AddScoped<IValidator<RequisicaoMedicaoUnica>, ValidadorRequisicaoMedicaoUnica>();
 builder.Services.AddScoped<IValidator<RequisicaoLoteMedicoes>, ValidadorRequisicaoLoteMedicoes>();
+builder.Services.AddScoped<IValidator<RequisicaoCriarEquipamento>, ValidadorRequisicaoCriarEquipamento>();
 
 builder.Services.AddSingleton<IPublicadorMensagens, PublicadorRabbitMq>();
 builder.Services.AddHostedService<ConsumidorMedicoes>();

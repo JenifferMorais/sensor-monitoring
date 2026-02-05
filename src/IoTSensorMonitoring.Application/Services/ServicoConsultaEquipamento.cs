@@ -35,6 +35,31 @@ public class ServicoConsultaEquipamento
         }
     }
 
+    public async Task<ResultadoOperacao<DtoEquipamentoDetalhado>> CriarAsync(
+        RequisicaoCriarEquipamento requisicao,
+        CancellationToken tokenCancelamento = default)
+    {
+        try
+        {
+            var equipamento = requisicao.ParaEntidade();
+
+            await _repositorioEquipamento.AdicionarAsync(equipamento, tokenCancelamento);
+
+            _logger.LogInformation("Equipamento criado: {Nome} (ID: {Id})", equipamento.Nome, equipamento.Id);
+
+            var equipamentoDetalhado = await _repositorioEquipamento.ObterPorIdComSensoresAsync(equipamento.Id, tokenCancelamento);
+
+            return ResultadoOperacao<DtoEquipamentoDetalhado>.Ok(
+                equipamentoDetalhado!.ParaDtoDetalhado(),
+                "Equipamento criado com sucesso");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao criar equipamento {Nome}", requisicao.Nome);
+            return ResultadoOperacao<DtoEquipamentoDetalhado>.ErroInterno();
+        }
+    }
+
     public async Task<ResultadoOperacao<RespostaPaginada<DtoEquipamento>>> ListarPaginadoAsync(
         int pagina,
         int tamanhoPagina,

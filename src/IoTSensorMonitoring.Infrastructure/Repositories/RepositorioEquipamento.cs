@@ -50,6 +50,12 @@ public class RepositorioEquipamento : IRepositorioEquipamento
         return (itens, total);
     }
 
+    public async Task AdicionarAsync(Equipamento equipamento, CancellationToken tokenCancelamento = default)
+    {
+        await _context.Equipamentos.AddAsync(equipamento, tokenCancelamento);
+        await _context.SaveChangesAsync(tokenCancelamento);
+    }
+
     public async Task AtualizarAsync(Equipamento equipamento, CancellationToken tokenCancelamento = default)
     {
         _context.Equipamentos.Update(equipamento);
