@@ -2,15 +2,14 @@ using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
 using IoTSensorMonitoring.Application.DTOs;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace IoTSensorMonitoring.IntegrationTests;
 
-public class TestesApiMedicoes : IClassFixture<WebApplicationFactory<Program>>
+public class TestesApiMedicoes : IClassFixture<AplicacaoTesteIntegracao>
 {
     private readonly HttpClient _cliente;
 
-    public TestesApiMedicoes(WebApplicationFactory<Program> fabrica)
+    public TestesApiMedicoes(AplicacaoTesteIntegracao fabrica)
     {
         _cliente = fabrica.CreateClient();
     }

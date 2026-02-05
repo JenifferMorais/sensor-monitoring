@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\IoTSensorMonitoring.API\IoTSensorMonitoring.API.csproj" />
     <ProjectReference Include="..\..\src\IoTSensorMonitoring.Application\IoTSensorMonitoring.Application.csproj" />
     <ProjectReference Include="..\..\src\IoTSensorMonitoring.Domain\IoTSensorMonitoring.Domain.csproj" />
   </ItemGroup>
