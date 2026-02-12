@@ -1,3 +1,4 @@
+using IoTSensorMonitoring.BackgroundWorkers.Workers;
 using IoTSensorMonitoring.Domain.Interfaces;
 using IoTSensorMonitoring.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Moq;
 
 namespace IoTSensorMonitoring.IntegrationTests;
@@ -19,6 +21,10 @@ public class AplicacaoTesteIntegracao : WebApplicationFactory<Program>
         {
             services.RemoveAll(typeof(DbContextOptions<ApplicationDbContext>));
             services.RemoveAll(typeof(IPublicadorMensagens));
+
+            var consumidor = services.Where(d => d.ImplementationType == typeof(ConsumidorMedicoes)).ToList();
+            foreach (var service in consumidor)
+                services.Remove(service);
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
